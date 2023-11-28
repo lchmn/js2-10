@@ -17,6 +17,7 @@ export async function fetchBreeds() {
 export async function fetchCatByBreed(breedId) {
   try {
     const response = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`);
+	console.log(data); // Додаємо лог для перевірки даних
     return response.data[0]; // Повертаємо перший об'єкт у відповіді, який містить інформацію про породу
   } catch (error) {
     console.error("Error fetching cat by breed: ", error);
