@@ -16,9 +16,12 @@ export async function fetchBreeds() {
 // Функція для отримання інформації про породу за ID
 export async function fetchCatByBreed(breedId) {
   try {
-    const response = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`);
-	console.log(data); // Додаємо лог для перевірки даних
-    return response.data[0]; // Повертаємо перший об'єкт у відповіді, який містить інформацію про породу
+	  return axios.get('https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}')
+    .then(response => {
+      const data = response.data;
+	  console.log(data); // Додаємо лог для перевірки даних
+      return data;
+    });
   } catch (error) {
     console.error("Error fetching cat by breed: ", error);
     throw error; // Передаємо помилку вгору
