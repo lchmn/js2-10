@@ -1,7 +1,7 @@
 import axios from "axios";
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
+axios.defaults.headers.common["x-api-key"] = "api_key=live_ IkvVMPAx2xKKtz9qpEURMEzicIabfS V6Esz8epHQrpBIrAtU4Ew4zQwj6xX6 wfeF";
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
