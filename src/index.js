@@ -1,25 +1,68 @@
+import axios from "axios";
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const breedsSelect = document.querySelector('.breed-select');
-  const breeds = await fetchBreeds();
+axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
 
-  breeds.forEach(breed => {
-    const option = document.createElement('option');
-    option.value = breed.id;
-    option.textContent = breed.name;
-    breedsSelect.appendChild(option);
-  });
+const breedSelect = document.querySelector('.breed-select');
+const loader = document.querySelector('.loader');
+const error = document.querySelector('.error');
+const catInfoDiv = document.querySelector('.cat-info');
 
-  breedsSelect.addEventListener('change', onBreedSelect);
+async function init() {
+  try {
+    loader.hidden = false;
+    const breeds = await fetchBreeds();
+    loader.hidden = true;
+
+    breeds.forEach(breed => {
+      const option = document.createElement('option');
+      option.value = breed.id;
+      option.textContent = breed.name;
+      breedSelect.appendChild(option);
+    });
+  } catch (err) {
+    console.error(err);
+    loader.hidden = true;
+    error.textContent = 'Failed to load breeds';
+    error.hidden = false;
+  }
+}
+
+breedSelect.addEventListener('change', async (e) => {
+  try {
+    loader.hidden = false;
+    const breedId = e.target.value;
+    const catData = await fetchCatByBreed(breedId);
+    updateCatInfo(catData);
+    loader.hidden = true;
+  } catch (err) {
+    console.error(err);
+    loader.hidden = true;
+    error.textContent = 'Failed to load cat data';
+    error.hidden = false;
+  }
 });
 
-function onBreedSelect(event) {
-  const breedId = event.target.value;
-  updateCatInfo(breedId);
+function updateCatInfo(catData) {
+  const catInfoDiv = document.querySelector('.cat-info');
+  
+  // Перевіряємо, чи є дані про кота
+  if (!catData) {
+    catInfoDiv.innerHTML = '<p>No data available</p>';
+    return;
+  }
+
+  // Створюємо розмітку з даними про кота
+  const markup = `
+    <h2>${catData.breed}</h2>
+    <p><strong>Description:</strong> ${catData.description}</p>
+    <p><strong>Temperament:</strong> ${catData.temperament}</p>
+    <img src="${catData.image.url}" alt="${catData.breed}">
+  `;
+
+  // Оновлюємо DOM
+  catInfoDiv.innerHTML = markup;
 }
 
-async function updateCatInfo(breedId) {
-  const catInfo = await fetchCatByBreed(breedId);
-  // Тут код для оновлення інформації про кота в DOM
-}
+
+init();
