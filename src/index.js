@@ -52,12 +52,15 @@ function updateCatInfo(catData) {
     return;
   }
 
+  // Перевіряємо, чи існує об'єкт image і має властивість url
+  const imageUrl = catData.image && catData.image.url ? catData.image.url : 'placeholder-image-url';
+
   // Створюємо розмітку з даними про кота
   const markup = `
     <h2>${catData.breed}</h2>
     <p><strong>Description:</strong> ${catData.description}</p>
     <p><strong>Temperament:</strong> ${catData.temperament}</p>
-    <img src="${catData.image.url}" alt="${catData.breed}">
+    <img src="${imageUrl}" alt="${catData.breed}">
   `;
 
   // Оновлюємо DOM
