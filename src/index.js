@@ -1,7 +1,7 @@
 import axios from "axios";
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
+axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6 wfeF";
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
@@ -11,6 +11,7 @@ const catInfoDiv = document.querySelector('.cat-info');
 async function init() {
   try {
     loader.hidden = false;
+    error.hidden = true;
     const breeds = await fetchBreeds();
     loader.hidden = true;
 
@@ -23,7 +24,6 @@ async function init() {
   } catch (err) {
     console.error(err);
     loader.hidden = true;
-    error.textContent = 'Failed to load breeds';
     error.hidden = false;
   }
 }
@@ -31,16 +31,18 @@ async function init() {
 breedSelect.addEventListener('change', async (e) => {
   try {
     loader.hidden = false;
+    error.hidden = true;
     const breedId = e.target.value;
     const catData = await fetchCatByBreed(breedId);
     if (catData.length > 0) {
       updateCatInfo(catData[0]);
+    } else {
+      throw new Error('No data found');
     }
     loader.hidden = true;
   } catch (err) {
     console.error(err);
     loader.hidden = true;
-    error.textContent = 'Failed to load cat data';
     error.hidden = false;
   }
 });
