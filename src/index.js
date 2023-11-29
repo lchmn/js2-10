@@ -45,27 +45,21 @@ breedSelect.addEventListener('change', async (e) => {
 
 function updateCatInfo(catData) {
   const catInfoDiv = document.querySelector('.cat-info');
-  
-  // Перевіряємо, чи є дані про кота
+
   if (!catData) {
     catInfoDiv.innerHTML = '<p>No data available</p>';
     return;
   }
 
-  // Перевіряємо, чи існує об'єкт image і має властивість url
-  const imageUrl = catData.image && catData.image.url ? catData.image.url : 'placeholder-image-url';
-
-  // Створюємо розмітку з даними про кота
-  const markup = `
-    <h2>${catData.breed}</h2>
-    <p><strong>Description:</strong> ${catData.description}</p>
-    <p><strong>Temperament:</strong> ${catData.temperament}</p>
-    <img src="${imageUrl}" alt="${catData.breed}">
+  const { url, breeds: [breed] } = catData;
+  const catInfoMarkup = `
+    <img src="${url}" alt="Breed: ${breed.name}">
+    <p><strong>Breed:</strong> ${breed.name}</p>
+    <p><strong>Description:</strong> ${breed.description}</p>
+    <p><strong>Temperament:</strong> ${breed.temperament}</p>
   `;
 
-  // Оновлюємо DOM
-  catInfoDiv.innerHTML = markup;
+  catInfoDiv.innerHTML = catInfoMarkup;
 }
-
 
 init();
