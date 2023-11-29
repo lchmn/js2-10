@@ -1,7 +1,7 @@
 import axios from "axios";
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-axios.defaults.headers.common["x-api-key"] = "api_key=live_ IkvVMPAx2xKKtz9qpEURMEzicIabfS V6Esz8epHQrpBIrAtU4Ew4zQwj6xX6 wfeF";
+axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
@@ -33,7 +33,9 @@ breedSelect.addEventListener('change', async (e) => {
     loader.hidden = false;
     const breedId = e.target.value;
     const catData = await fetchCatByBreed(breedId);
-    updateCatInfo(catData);
+    if (catData.length > 0) {
+      updateCatInfo(catData[0]);
+    }
     loader.hidden = true;
   } catch (err) {
     console.error(err);
@@ -44,13 +46,6 @@ breedSelect.addEventListener('change', async (e) => {
 });
 
 function updateCatInfo(catData) {
-  const catInfoDiv = document.querySelector('.cat-info');
-
-  if (!catData) {
-    catInfoDiv.innerHTML = '<p>No data available</p>';
-    return;
-  }
-
   const { url, breeds: [breed] } = catData;
   const catInfoMarkup = `
     <img src="${url}" alt="Breed: ${breed.name}">
