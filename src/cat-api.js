@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
+axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6 wfeF";
 
 // Функція для отримання списку усіх порід
 export async function fetchBreeds() {
