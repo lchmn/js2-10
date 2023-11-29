@@ -1,17 +1,35 @@
 import axios from "axios";
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6 wfeF";
+axios.defaults.headers.common["x-api-key"] = "live_IkvVMPAx2xKKtz9qpEURMEzicIabfSV6Esz8epHQrpBIrAtU4Ew4zQwj6xX6wfeF";
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const catInfoDiv = document.querySelector('.cat-info');
 
+async function fetchBreeds() {
+  try {
+    const response = await axios.get('https://api.thecatapi.com/v1/breeds');
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching breeds: ", error);
+    throw error;
+  }
+}
+
+async function fetchCatByBreed(breedId) {
+  try {
+    const response = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cat by breed: ", error);
+    throw error;
+  }
+}
+error.hidden = true; 
 async function init() {
   try {
     loader.hidden = false;
-    error.hidden = true;
     const breeds = await fetchBreeds();
     loader.hidden = true;
 
@@ -24,6 +42,7 @@ async function init() {
   } catch (err) {
     console.error(err);
     loader.hidden = true;
+    error.textContent = 'Failed to load breeds';
     error.hidden = false;
   }
 }
@@ -31,23 +50,24 @@ async function init() {
 breedSelect.addEventListener('change', async (e) => {
   try {
     loader.hidden = false;
-    error.hidden = true;
     const breedId = e.target.value;
     const catData = await fetchCatByBreed(breedId);
-    if (catData.length > 0) {
-      updateCatInfo(catData[0]);
-    } else {
-      throw new Error('No data found');
-    }
+    updateCatInfo(catData[0]);
     loader.hidden = true;
   } catch (err) {
     console.error(err);
     loader.hidden = true;
+    error.textContent = 'Failed to load cat data';
     error.hidden = false;
   }
 });
 
 function updateCatInfo(catData) {
+  if (!catData) {
+    catInfoDiv.innerHTML = '<p>No data available</p>';
+    return;
+  }
+
   const { url, breeds: [breed] } = catData;
   const catInfoMarkup = `
     <img src="${url}" alt="Breed: ${breed.name}">

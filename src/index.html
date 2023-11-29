@@ -4,6 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 10</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slim-select@1.27.0/dist/slim-select.min.css">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .breed-select {
+        width: 300px;
+        margin-bottom: 20px;
+      }
+
+      .loader {
+        color: #007bff;
+        margin-bottom: 20px;
+        display: none; 
+      }
+
+      .error {
+        color: red;
+        margin-bottom: 20px;
+        display: none; 
+      }
+
+      .cat-info img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <select class="breed-select"></select>
@@ -12,5 +44,10 @@
     <div class="cat-info"></div>
 
     <script src="index.js" type="module"></script>
+    <script>
+      new SlimSelect({
+        select: '.breed-select'
+      });
+    </script>
   </body>
 </html>
